@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String selectedPriority = 'medium';
   TextEditingController taskcontroller = TextEditingController();
      List<Map<String,dynamic>> tasks = [  ];
 
@@ -26,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
         return;
       }
-      await ApiService.createTask(task);
+      await ApiService.createTask(task, selectedPriority);
       await loadTasks();
       taskcontroller.clear();
 
@@ -137,6 +138,21 @@ class _HomeScreenState extends State<HomeScreen> {
                           border: OutlineInputBorder(),
 
                         ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: ['low','medium','high'].map((p){
+                          return Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4),
+                            child: ChoiceChip(
+                              label: Text(p),
+                              selected: selectedPriority == p,
+                              onSelected: (selected) {
+                                setState(()=> selectedPriority = p);
+                              } ,
+                            ),
+                          );
+                        }).toList(),
                       ),
                       ElevatedButton(
                         onPressed: (){

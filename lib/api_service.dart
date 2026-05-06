@@ -1,3 +1,4 @@
+// import 'package:flutter/scheduler.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +16,7 @@ class ApiService {
 //get token from device storage
   static Future<String?> getToken()async{
     final prefs = await SharedPreferences.getInstance();
-    await prefs.getString('token');
+    return prefs.getString('token');
   }
 
 //delete token(logout)
@@ -34,11 +35,14 @@ static Future<void> deleteToken()async{
       throw Exception("Failed to load Task");
     }
   }
-  static Future<void> createTask(String title) async{
+  static Future<void> createTask(String title, String priority) async{
     await http.post(
       Uri.parse('$baseUrl/tasks'),
       headers: {"Content-Type":"application/json"},
-      body: jsonEncode({"title":title}),
+      body: jsonEncode({
+        "title":title, 
+        "priority": priority
+        }),
     );
   }
 //register
