@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express();
 const cors = require('cors');
-const mongooes = require('mongoose');
+const mongoose = require('mongoose');
 const authRoutes = require('./auth');
 
 require('dotenv').config();
@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/auth', authRoutes);
 
-mongooes.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDb is connected"))
 .catch((err) => console.log("DB Error: ", err))
 
@@ -18,12 +18,19 @@ app.get('/',(req,res)=>{
     res.send("Task manager is running..");
 });
 
-let taskSchema = new mongooes.Schema({
+const taskSchema = new mongoose.Schema({
     title: String,
     done: {type: Boolean, default: false},
+    priority: {
+        type: String,
+        enum: ['low', 'medium','high'],
+        default: 'medium'
+    },
 });
 
-const Task = mongooes.model('Task',taskSchema);
+
+
+const Task = mongoose.model('Task',taskSchema);
 
 app.get('/tasks',async (req,res)=>{
     const tasks = await Task.find();
@@ -31,12 +38,12 @@ app.get('/tasks',async (req,res)=>{
 });
 //for Post
 app.post('/tasks', async (req,res)=>{
-    const {title} =req.body;
+    const {title,priority} =req.body;
 
     if(!title){
         return res.status(400).json({message: "Title is required"});
     }
-    const newTask = await Task.create({title});
+    const newTask = await Task.create({title, priority});
     res.status(201).json(newTask);
     
 })
