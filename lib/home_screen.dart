@@ -101,6 +101,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     await loadTasks();
                   },
                 child: ListTile(
+                  trailing: Icon(
+                    Icons.flag,
+                    color: task["priority"] =='high'
+                    ? Colors.red
+                    :task["priority"] == 'low'
+                    ?Colors.green
+                    :Colors.orange,
+                  ),
                   leading: Icon(
                     task["done"] == true
                     ? Icons.check_box
