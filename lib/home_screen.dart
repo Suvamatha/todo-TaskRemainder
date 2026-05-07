@@ -119,12 +119,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                   margin: const EdgeInsets.only(bottom: 12),
                                   child: ListTile(
                                     subtitle: task["dueDate"]!= null
-                                    ? Text(
-                                      "Due: ${DateTime.parse(task["dueDate"]).day}/"
-                                      "${DateTime.parse(task["dueDate"]).month}/"
-                                      "${DateTime.parse(task["dueDate"]).year}",
-                                      style: TextStyle(color: Colors.grey,fontSize: 12),
-                                    )
+                                    ? Builder(builder: (context){
+                                      final due = DateTime.parse(task["dueDate"]);
+                                      final isOverdue = due.isBefore(DateTime.now())
+                                      && task["done"]==false;
+                                      return Text(
+                                        isOverdue
+                                        ? "⚠️ Overdue: ${due.day}/${due.month}/${due.year}"
+                                        :"Due: ${due.day}/${due.month}/${due.year}",
+                                        style: TextStyle(
+                                          color: isOverdue? Colors.red: Colors.grey,
+                                          fontSize: 12,
+                                          fontWeight: isOverdue ? FontWeight.bold : FontWeight.normal,
+                                        ),
+                                      );
+                                    })
                                     :null,
                                     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
