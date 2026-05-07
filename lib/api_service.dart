@@ -35,13 +35,14 @@ static Future<void> deleteToken()async{
       throw Exception("Failed to load Task");
     }
   }
-  static Future<void> createTask(String title, String priority) async{
+  static Future<void> createTask(String title, String priority, String? dueDate) async{
     await http.post(
       Uri.parse('$baseUrl/tasks'),
       headers: {"Content-Type":"application/json"},
       body: jsonEncode({
         "title":title, 
-        "priority": priority
+        "priority": priority,
+        "dueDate": dueDate
         }),
     );
   }

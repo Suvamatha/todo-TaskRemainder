@@ -26,6 +26,7 @@ const taskSchema = new mongoose.Schema({
         enum: ['low', 'medium','high'],
         default: 'medium'
     },
+    dueDate: {type: Date, default: null},
 });
 
 
@@ -38,12 +39,12 @@ app.get('/tasks',async (req,res)=>{
 });
 //for Post
 app.post('/tasks', async (req,res)=>{
-    const {title,priority} =req.body;
+    const {title,priority,dueDate} =req.body;
 
     if(!title){
         return res.status(400).json({message: "Title is required"});
     }
-    const newTask = await Task.create({title, priority});
+    const newTask = await Task.create({title, priority,dueDate});
     res.status(201).json(newTask);
     
 })

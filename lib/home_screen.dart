@@ -12,6 +12,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  DateTime? selectedDate;
+  
   String selectedPriority = 'medium';
   TextEditingController taskcontroller = TextEditingController();
      List<Map<String,dynamic>> tasks = [  ];
@@ -27,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
         return;
       }
-      await ApiService.createTask(task, selectedPriority);
+      await ApiService.createTask(task, selectedPriority, selectedDate?.toIso8601String());
       await loadTasks();
       taskcontroller.clear();
 
@@ -45,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     loadTasks();
   }
+  
   Future<void> loadTasks()async{
     setState(() => isLoading = true);
     try{
@@ -58,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   setState(() => isLoading = false);
 }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,6 +118,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Card(
                                   margin: const EdgeInsets.only(bottom: 12),
                                   child: ListTile(
+                                    subtitle: task["dueDate"]!= null
+                                    ? Text(
+                                      "Due: ${DateTime.parse(task["dueDate"]).day}/"
+                                      "${DateTime.parse(task["dueDate"]).month}/"
+                                      "${DateTime.parse(task["dueDate"]).year}",
+                                      style: TextStyle(color: Colors.grey,fontSize: 12),
+                                    )
+                                    :null,
                                     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                     trailing: Icon(
@@ -157,6 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {
           // Reset priority and input when opening the bottom sheet
           selectedPriority = 'medium';
+          selectedDate = null;
           taskcontroller.clear();
 
           showModalBottomSheet(
@@ -215,7 +228,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                   },
                                 ),
                               );
+                              
                             }).toList(),
+                            
+                          ),
+                          TextButton(
+                            onPressed: () async{
+                              final picked = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2100)
+                                );
+                                if(picked != null){
+                                  setModalState(()=> selectedDate = picked);
+                                }
+                            },
+                            child: Text(
+                              selectedDate == null
+                              ? "pick due Date"
+                              : "Due: ${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}",
+                            ),
                           ),
                           const SizedBox(height: 24),
                           FilledButton(
