@@ -59,51 +59,79 @@ try{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
-      body: Padding(
-        padding: EdgeInsets.all(12),
-        child: Column(
-          children: [
-            Text("Welcome Back", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w100),),
-
-            TextField(
-              controller: emailController,
-              style: TextStyle(color: Colors.red),
-              decoration: InputDecoration(
-                hintText: "Email",
-                hintStyle: TextStyle(color: Colors.white)
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Welcome Back",
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                  ),
+                  const SizedBox(height: 32),
+                  TextField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: "Email",
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: "Password",
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: _handlelogic,
+                      child: const Text(
+                        "Login",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SignupScreen()),
+                      );
+                    },
+                    child: const Text("Don't have an account? Sign up"),
+                  )
+                ],
               ),
             ),
-            SizedBox(height: 10,),
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              style: TextStyle(color: Colors.red),
-              decoration: InputDecoration(
-                hintText: "Password",
-                hintStyle: TextStyle(color: Colors.white),
-              ),
-            ),
-            SizedBox(height: 20,
-            width: double.infinity,
-
-            child: ElevatedButton(
-              onPressed: () => {
-                _handlelogic()
-              },
-              child: Text("Login",),
-            ),  
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignupScreen()),
-                );
-              },
-              child: Text("Don't have an account? Sign up"),
-            )
-          ],
+          ),
         ),
       ),
     );
