@@ -1,41 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:project_flutter/api_service.dart';
-import 'package:project_flutter/home_screen.dart';
-import 'login_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:project_flutter/notification_service.dart';
+import 'package:project_flutter/providers/theme_provider.dart';
+import 'package:project_flutter/screens/splash_screen.dart';
+import 'package:project_flutter/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final token = await ApiService.getToken();
+  await NotificationService.init();
   
-  runApp(MyApp(token: token));
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  final String? token;
-  const MyApp({super.key, required this.token});
+class MyApp extends ConsumerWidget {
+  const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeProvider);
+
     return MaterialApp(
-      title: 'Task Manager',
-      home: token != null && token!.isNotEmpty 
-          ? const HomeScreen() 
-          : const LoginScreen(),
+      title: 'FocusFlow',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorSchemeSeed: Colors.deepPurple,
-        useMaterial3: true,
-        appBarTheme: const AppBarTheme(
-          centerTitle: true,
-          elevation: 0,
-        ),
-        cardTheme: CardThemeData(
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
+      home: const SplashScreen(),
     );
   }
 }
