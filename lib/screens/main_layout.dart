@@ -56,18 +56,18 @@ class _MainLayoutState extends State<MainLayout> {
           },
           destinations: const [
             NavigationDestination(
-              icon: Icon(Icons.dashboard_outlined),
-              selectedIcon: Icon(Icons.dashboard),
+              icon: Icon(Icons.home_outlined),
+              selectedIcon: Icon(Icons.home),
               label: 'Home',
             ),
             NavigationDestination(
-              icon: Icon(Icons.calendar_month_outlined),
-              selectedIcon: Icon(Icons.calendar_month),
+              icon: Icon(Icons.calendar_today_outlined),
+              selectedIcon: Icon(Icons.calendar_today),
               label: 'Calendar',
             ),
             NavigationDestination(
-              icon: Icon(Icons.timer_outlined),
-              selectedIcon: Icon(Icons.timer),
+              icon: Icon(Icons.center_focus_strong_outlined),
+              selectedIcon: Icon(Icons.center_focus_strong),
               label: 'Focus',
             ),
             NavigationDestination(

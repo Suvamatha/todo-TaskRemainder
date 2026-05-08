@@ -12,27 +12,14 @@ class TaskCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDone = task.isDone;
-    final priority = task.priority.toLowerCase();
     
-    Color priorityColor;
-    switch (priority) {
-      case 'high':
-        priorityColor = Colors.red;
-        break;
-      case 'low':
-        priorityColor = Colors.green;
-        break;
-      default:
-        priorityColor = Colors.orange;
-    }
-
     return Dismissible(
       key: Key(task.id),
       background: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
           color: Colors.red.shade400,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
         ),
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
@@ -42,22 +29,25 @@ class TaskCard extends ConsumerWidget {
       onDismissed: (_) {
         ref.read(tasksProvider.notifier).deleteTask(task.id);
       },
-      child: Card(
+      child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         child: InkWell(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
           onTap: () {
             ref.read(tasksProvider.notifier).toggleTask(task.id);
           },
-          child: Padding(
+          child: Container(
             padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: Theme.of(context).dividerColor.withOpacity(0.05),
+              ),
+            ),
             child: Row(
               children: [
-                Icon(
-                  isDone ? Icons.check_circle : Icons.radio_button_unchecked,
-                  color: isDone ? Colors.green : Colors.grey,
-                  size: 28,
-                ),
+                _buildCheckbox(context, ref),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -67,47 +57,71 @@ class TaskCard extends ConsumerWidget {
                         task.title.isEmpty ? 'Untitled Task' : task.title,
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                           decoration: isDone ? TextDecoration.lineThrough : null,
                           color: isDone ? Colors.grey : null,
                         ),
                       ),
-                      if (task.dueDate != null) ...[
+                      if (task.priority != 'medium') ...[
                         const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Icon(Icons.calendar_today, size: 12, color: Colors.grey.shade600),
-                            const SizedBox(width: 4),
-                            Text(
-                              DateFormat('MMM d, y').format(task.dueDate!),
-                              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                            ),
-                          ],
+                        Text(
+                          "${task.priority[0].toUpperCase()}${task.priority.substring(1)} Priority",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: _getPriorityColor(task.priority).withOpacity(0.8),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ],
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: priorityColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    priority.toUpperCase(),
+                if (isDone)
+                  const Text(
+                    "Done",
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: priorityColor,
+                      color: Colors.grey,
                     ),
-                  ),
-                ),
+                  )
+                else
+                  const Icon(Icons.more_vert, color: Colors.grey, size: 20),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildCheckbox(BuildContext context, WidgetRef ref) {
+    final isDone = task.isDone;
+    return GestureDetector(
+      onTap: () => ref.read(tasksProvider.notifier).toggleTask(task.id),
+      child: Container(
+        height: 26,
+        width: 26,
+        decoration: BoxDecoration(
+          color: isDone ? Theme.of(context).colorScheme.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isDone ? Theme.of(context).colorScheme.primary : Colors.grey.shade400,
+            width: 2,
+          ),
+        ),
+        child: isDone
+            ? const Icon(Icons.check, size: 18, color: Colors.white)
+            : null,
+      ),
+    );
+  }
+
+  Color _getPriorityColor(String priority) {
+    switch (priority.toLowerCase()) {
+      case 'high': return Colors.red;
+      case 'low': return Colors.green;
+      default: return Colors.orange;
+    }
   }
 }
