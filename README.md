@@ -6,7 +6,7 @@
 
 ## 📱 Screenshots
 
-![alt text](<WhatsApp Image 2026-05-10 at 7.05.15 PM.jpeg>)
+![alt text](<WhatsApp Image 2026-05-10 at 7.05.15 PM.jpeg>) ![alt text](<WhatsApp Image 2026-05-10 at 7.05.16 PM.jpeg>)
 
 ---
 
