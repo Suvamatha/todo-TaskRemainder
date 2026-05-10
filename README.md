@@ -6,9 +6,6 @@
 
 ## 📱 Screenshots
 https://github.com/user-attachments/assets/11dcec99-cb7a-45a6-a0b6-5bb141640409
-
-![alt text](<WhatsApp Image 2026-05-10 at 7.05.15 PM.jpeg>) ![alt text](<WhatsApp Image 2026-05-10 at 7.05.16 PM.jpeg>)
-
 ---
 
 ## ✨ Features
