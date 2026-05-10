@@ -15,10 +15,16 @@ class NotificationService {
     const settings = InitializationSettings(android: android);
 
     // Notification initialization is skipped on Web due to plugin limitations
-    await (_notifications as dynamic).initialize(
-      settings,
+    await _notifications.initialize(
+      settings: settings,
       onDidReceiveNotificationResponse: (details) {},
     );
+
+    final androidImplementation =
+        _notifications.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+    await androidImplementation?.requestNotificationsPermission();
+    await androidImplementation?.requestExactAlarmsPermission();
   }
 
   static Future<void> scheduleTaskNotification({

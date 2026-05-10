@@ -4,8 +4,9 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://localhost:3000';
-  // static const String baseUrl = 'http://10.0.2.2:3000';
+  // Use your local network IP address for physical devices
+  static const String baseUrl = 'http://192.168.1.13:3000';
+  // static const String baseUrl = 'http://10.0.2.2:3000'; // For Emulator
 
 //save token to device storage
   static Future<void> saveToken(String token) async{
