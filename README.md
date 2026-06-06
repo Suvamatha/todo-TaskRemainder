@@ -82,7 +82,7 @@ PORT=3000
 # 5. Start the server
 node index.js
 ```
-//jbkkjbkjnb
+
 
 Server runs at `http://localhost:3000` ✅
 
